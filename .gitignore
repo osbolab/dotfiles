@@ -14,3 +14,4 @@ code/
 
 .vimtags
 .tags/
+.config/ranger/history

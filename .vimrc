@@ -29,9 +29,9 @@ if has("gui_running")
     set guioptions-=r   " No RHS scrollbar
     set guioptions-=L   " No LHS scrollbar
 else
-    """ Set your terminal emulator's pallet; 
+    """ Set your terminal emulator's pallet;
     """ you can't get good colors from vim.
-    """ For solarized set t_Co=16 
+    """ For solarized set t_Co=16
     set t_Co=256
     colorscheme Tomorrow-Night
     highlight colorcolumn ctermbg=236
@@ -118,7 +118,7 @@ set modelines=5           " they must be within the first or last 5 lines.
 set ffs=unix,dos,mac      " Try recognizing dos, unix, and mac line endings.
 " If the current buffer has never been saved, it will have no name,
 " call the file browser to save it, otherwise just save it.
-command! -nargs=0 -bar UpdateF if &modified 
+command! -nargs=0 -bar UpdateF if &modified
                            \|    if empty(bufname('%'))
                            \|        browse confirm write
                            \|    else
@@ -126,6 +126,11 @@ command! -nargs=0 -bar UpdateF if &modified
                            \|    endif
                            \|endif
 nnoremap <silent> <C-S> :<C-u>UpdateF<CR>
+""" Show training whitespace
+set list listchars=tab:»·,trail:·
+""" Remove trailing whitespace from code files
+autocmd FileType c,cpp,java,php,pl,python,vim
+        \ autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 """ Backup
 set backup
@@ -134,7 +139,7 @@ set directory=~/.swap/vim
 
 """ Messages, Info, Status
 set ls=2                  " allways show status line
-set noeb vb t_vb=         " Disable all bells. Seriously, no. 
+set noeb vb t_vb=         " Disable all bells. Seriously, no.
 au GUIEnter * set vb t_vb=
 set confirm               " Y-N-C prompt if closing with unsaved changes.
 set showcmd               " Show incomplete normal mode commands as I type.
@@ -144,7 +149,7 @@ set shortmess+=a          " Use [+]/[RO]/[w] for modified/readonly/written.
 """ Searching and Patterns
 set ignorecase            " Default to using case insensitive searches,
 set smartcase             " unless uppercase letters are used in the regex.
-set smarttab              " Handle tabs more intelligently 
+set smarttab              " Handle tabs more intelligently
 set incsearch             " Incrementally search while typing a /regex
 set nohlsearch            " Don't highlight searches by default.
   " hide matches on <leader>space
@@ -158,12 +163,28 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#fnamecollapse = 0
-let g:airline#extensions#virtualenv#enabled = 1
+let g:airline#extensions#virtualenv#enabled = 0
 let g:airline#extensions#tmuxline#enabled = 1
-let g:airline_inactive_collapse = 0
-let g:virtualenv_auto_activate = 1
+let g:airline_inactive_collapse = 1
+let g:virtualenv_auto_activate = 0
 set laststatus=2          " Always show statusline, even if only 1 window.
+let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'n'  : 'N',
+    \ 'i'  : 'I',
+    \ 'R'  : 'R',
+    \ 'c'  : 'C',
+    \ 'v'  : 'V',
+    \ 'V'  : 'V',
+    \ '' : 'V',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ '' : 'S'
+    \ }
 
+let g:airline_section_z = airline#section#create(['linenr', ':%3c '])
+let g:airline_section_x = airline#section#create_right(['tagbar'])
+let g:airline_section_y = airline#section#create_right(['filetype', 'ffenc'])
 
 " ==========================================================
 " Tmuxline - style the tbux status bar to look like VIM
@@ -183,9 +204,8 @@ let g:tmuxline_preset = {
 " ==========================================================
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
-    \'b': [ promptline#slices#cwd({'dir_limit': 2}) ],
+    \'b': [ promptline#slices#cwd({'dir_limit': 8}) ],
     \'c': [ promptline#slices#vcs_branch()],
-    \'x': [ promptline#slices#git_status() ],
     \'warn': [ promptline#slices#last_exit_code() ]}
 
 
@@ -202,26 +222,38 @@ nmap <leader>c :copen<CR>
 nmap <leader>cc :cclose<CR>
 
 " ----------------------------------------------------------
+"  CommandT - Fuzzy file searching
+" ----------------------------------------------------------
+map <silent> <F1> :CommandT<CR>
+""" Disable optimizations that delay rendering during input
+let g:CommandTInputDebounce = 0
+
+" ----------------------------------------------------------
 "  NERDTree - File browser
 " ----------------------------------------------------------
-map <leader>n :NERDTreeToggle<CR>
+let g:Toolwin_Nerd = -1
+let g:Toolwin_Ctags = -1
+
+function! Toggle_Toolwin_NerdTree()
+  if g:Toolwin_Nerd < 0
+    if g:Toolwin_Ctags >= 0
+      :TagbarClose
+      let g:Toolwin_Ctags = -1
+    endif
+    :NERDTree
+    let g:Toolwin_Nerd = winnr()
+  else
+    let g:Toolwin_Nerd = -1
+    :NERDTreeClose
+  endif
+endfunction
+map <silent> <F2> :call Toggle_Toolwin_NerdTree()<CR>
+
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeQuitOnOpen = 1
 " Open NERDTree if no files were specified
 au StdinReadPre * let s:std_in=1
 au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" ----------------------------------------------------------
-"  CommandT - Fuzzy file searching
-" ----------------------------------------------------------
-""" Use most-recently-used buffer for CommandT
-:noremap <silent> <leader>b :CommandTMRU<CR>
-let g:CommandTInputDebounce = 0
-
-" ----------------------------------------------------------
-"  Gundo - Undo tree visualization
-" ----------------------------------------------------------
-map <leader>g :GundoToggle<CR>
 
 " ----------------------------------------------------------
 "  CTAGS - Symbol navigation
@@ -230,7 +262,21 @@ map <leader>g :GundoToggle<CR>
 set tags=./tags;$HOME
 """ Default to a pretty thin toolwindow
 let g:tagbar_width = 30
-nmap <F12> :TagbarToggle<CR>
+function! Toggle_Toolwin_Ctags()
+  if g:Toolwin_Ctags < 0
+    if g:Toolwin_Nerd >= 0
+      :NERDTreeClose
+      let g:Toolwin_Nerd = -1
+    endif
+    :TagbarOpen
+    let g:Toolwin_Ctags = winnr()
+  else
+    let g:Toolwin_Ctags = -1
+    :TagbarClose
+  endif
+endfunction
+nmap <silent> <F3> :call Toggle_Toolwin_Ctags()<CR>
+
 """ Open the window automatically if there's enough room
 function! AutoTagbar()
   let l:width=winwidth(0)
@@ -241,10 +287,25 @@ endfunction
 au FileType c,cpp :call AutoTagbar()
 
 
+" ----------------------------------------------------------
+"  Gundo - Undo tree visualization
+" ----------------------------------------------------------
+noremap <silent> <F4> :GundoToggle<CR>
+
+" ----------------------------------------------------------
+"  Make - build environment
+" ----------------------------------------------------------
+map <silent> <F5> :make<CR>
+""" Automatically show errors in the quickwindow
+au QuickFixCmdPost [^l]* nested cwindow
+au QuickFixCmdPost    l* nested lwindow
+
+
+
 " ==========================================================
 "  General Shortcuts
 " ==========================================================
-let mapleader=","             
+let mapleader=","
 """ Respond to typos
 command! W :w
 command! Q :q
@@ -255,22 +316,14 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe
     \ ":echo 'vimrc reloaded'"<CR>
 
 " ----------------------------------------------------------
-"  Make - build environment
-" ----------------------------------------------------------
-map <silent> <leader>m :make<CR>
-""" Automatically show errors in the quickwindow
-au QuickFixCmdPost [^l]* nested cwindow
-au QuickFixCmdPost    l* nested lwindow
-
-" ----------------------------------------------------------
-"  Window management 
+"  Window management
 " ----------------------------------------------------------
 " make these all work in insert mode too (<C-O> makes next cmd
 "  happen as if in command mode)
 imap <C-W> <C-O><C-W>
 
 """ Always split windows down and to the right
-set splitright            
+set splitright
 set splitbelow
 
 " ctrl-jklm  changes to that split
@@ -284,22 +337,22 @@ map <C-K> <C-W>k<C-W>_
 " ----------------------------------------------------------
 """ Enter window sizing mode for one second when <Window>[-=,.] is pressed
 """ Synonyms for -+/<>, but don't use those because they require shift
-call tinymode#ModeMsg("winsize", "Change window size +/-") 
-call tinymode#ModeArg("winsize", "timeoutlen", 1000) 
-call tinymode#EnterMap("winsize", "<C-W>=", "+") 
-call tinymode#EnterMap("winsize", "<C-W>-", "-") 
-call tinymode#EnterMap("winsize", "<C-W>,", "<") 
-call tinymode#EnterMap("winsize", "<C-W>.", ">") 
-call tinymode#Map("winsize", "=", "2wincmd +") 
-call tinymode#Map("winsize", "-", "2wincmd -") 
-call tinymode#Map("winsize", ",", "2wincmd <") 
-call tinymode#Map("winsize", ".", "2wincmd >") 
+call tinymode#ModeMsg("winsize", "Change window size +/-")
+call tinymode#ModeArg("winsize", "timeoutlen", 1000)
+call tinymode#EnterMap("winsize", "<C-W>=", "+")
+call tinymode#EnterMap("winsize", "<C-W>-", "-")
+call tinymode#EnterMap("winsize", "<C-W>,", "<")
+call tinymode#EnterMap("winsize", "<C-W>.", ">")
+call tinymode#Map("winsize", "=", "2wincmd +")
+call tinymode#Map("winsize", "-", "2wincmd -")
+call tinymode#Map("winsize", ",", "2wincmd <")
+call tinymode#Map("winsize", ".", "2wincmd >")
 
 " ----------------------------------------------------------
 "  Window management - Splitting
 " ----------------------------------------------------------
 """ Bind the new window to this one's scroll position
-fu! SplitScroll()   
+fu! SplitScroll()
     :wincmd v
     :wincmd w
     execute "normal! \<C-d>"
@@ -308,14 +361,14 @@ fu! SplitScroll()
     :set scrollbind
 endfu
 """ Split optimally given the window size
-function! SplitWindow()  
-  let l:height=winheight(0) * 2    
-  let l:width=winwidth(0)          
-  if (l:height > l:width)                
-     :split                               
-  else                                   
-     :vsplit                              
-  endif                                  
+function! SplitWindow()
+  let l:height=winheight(0) * 2
+  let l:width=winwidth(0)
+  if (l:height > l:width)
+     :split
+  else
+     :vsplit
+  endif
 endfunction
 nmap <leader>sb :call SplitScroll()<CR>
 nmap <silent> <C-W><C-M> :call SplitWindow()<CR>
