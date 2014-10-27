@@ -1,0 +1,22 @@
+#!/bin/sh
+
+LSEP=
+LSEPE=
+RSEP=
+RSEPE=
+
+UPTIME="up $(uptime | cut -d \  -f 5 | rev | cut -c 2- | rev)"
+
+WIDTH=${1}
+
+SMALL=80
+MEDIUM=140
+
+if [ "$WIDTH" -gt "$MEDIUM" ]; then
+  MPD="#[fg=colour247,bg=colour236,bold,noitalics,nounderscore] $UPTIME"
+fi
+
+DATE="#[fg=colour236,bg=colour236,nobold,noitalics,nounderscore]$RSEP#[fg=colour247,bg=colour236,nobold,noitalics,nounderscore] $(date +'%D')"
+TIME="#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore]$RSEP#[fg=colour236,bg=colour252,bold,noitalics,nounderscore] $(date +'%H:%M')"
+
+echo "$DATE $TIME $UNAME $MPD "

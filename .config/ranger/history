@@ -1,0 +1,5 @@
+
+delete
+shell git submodule add https://github.com/Rip-Rip/clang_complete.git bundle/clang-complete
+search clang
+shell make install
