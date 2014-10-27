@@ -5,3 +5,4 @@
 	editor = vim
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore.global
