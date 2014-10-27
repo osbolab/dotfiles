@@ -1,7 +1,14 @@
+code/
+
+# Sensitive
+.ssh/
+
+# Purely temporary
 .backup/
 .cache/
-.ssh/
 .swap/
 .viminfo
 .lesshst
-.gitconfig
+.bash_history
+.config/ranger/bookmarks
+
