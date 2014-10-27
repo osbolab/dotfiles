@@ -40,7 +40,6 @@ cmap w!! w !sudo tee % >/dev/null
 imap <C-W> <C-O><C-W>
 
 
-
 let g:NERDTreeWinPos = "right"
 
 " Open NERDTree if no files were specified
@@ -49,7 +48,6 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Open NERDTree
 map <leader>n :NERDTreeToggle<CR>
-
 
 
 map <leader>tq :tabclose<CR>
@@ -151,7 +149,7 @@ inoremap <C-BS> <C-\><C-o>db
 
 " If the current buffer has never been saved, it will have no name,
 " call the file browser to save it, otherwise just save it.
-command -nargs=0 -bar UpdateF if &modified 
+command! -nargs=0 -bar UpdateF if &modified 
                            \|    if empty(bufname('%'))
                            \|        browse confirm write
                            \|    else
@@ -159,7 +157,7 @@ command -nargs=0 -bar UpdateF if &modified
                            \|    endif
                            \|endif
 nnoremap <silent> <C-S> :<C-u>UpdateF<CR>
-
+ 
 """" Reading/Writing
 set noautowrite             " Never write a file unless I request it.
 set noautowriteall          " NEVER.
@@ -287,3 +285,6 @@ let g:clang_conceal_snippets=1
 " The single one that works with clang_complete
 let g:clang_snippets_engine='clang_complete'
 
+" Update ctags in the background
+let g:easytags_async = 1
+let g:easytags_by_filetype="~/.ctags"
