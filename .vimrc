@@ -138,6 +138,12 @@ endif
 autocmd FileType c,cpp,java,php,pl,python,vim
         \ autocmd BufWritePre <buffer> :%s/\s\+$//e
 
+" Autodetect filetype on first save
+augroup FiletypeOnSave
+  au!
+  au BufWritePost * if &ft == "" | filetype detect | endif
+augroup END
+
 function! EnsureDirExists (dir)
   if !isdirectory(a:dir)
     if exists("*mkdir")
