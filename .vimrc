@@ -1,6 +1,10 @@
 "
 set nocompatible              " Don't be compatible with vi
 
+if has('win32') || has('win64')
+  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+endif
+
 " ==========================================================
 " Pathogen - Allows us to organize our vim plugins
 " ==========================================================
@@ -127,13 +131,28 @@ command! -nargs=0 -bar UpdateF if &modified
                            \|endif
 nnoremap <silent> <C-S> :<C-u>UpdateF<CR>
 """ Show training whitespace
-set list listchars=tab:»·,trail:·
+if !has('win32') && !has('win64')
+  set list listchars=tab:»·,trail:·
+endif
 """ Remove trailing whitespace from code files
 autocmd FileType c,cpp,java,php,pl,python,vim
         \ autocmd BufWritePre <buffer> :%s/\s\+$//e
 
+function! EnsureDirExists (dir)
+  if !isdirectory(a:dir)
+    if exists("*mkdir")
+      call mkdir(a:dir,'p')
+      echo "Created directory: " . a:dir
+    else
+      echo "Please create directory: " . a:dir
+    endif
+  endif
+endfunction
+
 """ Backup
 set backup
+call EnsureDirExists($HOME.'/.backup/vim')
+call EnsureDirExists($HOME.'/.swap/vim')
 set backupdir=~/.backup/vim
 set directory=~/.swap/vim
 
