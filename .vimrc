@@ -409,6 +409,12 @@ let g:clang_conceal_snippets=1
 """ The only one that works with clang_complete (?)
 let g:clang_snippets_engine='clang_complete'
 
+""" Use clang for source formatting
+""" Pick up the format from each project
+let g:clang_format#detect_style_file = 1
+""" Format on save
+let g:clang_format#auto_format = 1
+
 """ Update ctags in the background
 let g:easytags_async = 1
 """ Separate tags into lanuage-specific files (duh)

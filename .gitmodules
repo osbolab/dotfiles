@@ -65,3 +65,6 @@
 [submodule ".vim/bundle/gundo"]
 	path = .vim/bundle/gundo
 	url = https://github.com/sjl/gundo.vim.git
+[submodule ".vim/bundle/clang-format"]
+	path = .vim/bundle/clang-format
+	url = https://github.com/rhysd/vim-clang-format.git
