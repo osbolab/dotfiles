@@ -6,3 +6,6 @@
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore.global
+[github]
+	user = Osbolab
+	email = matt@osbolab.com

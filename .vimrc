@@ -112,6 +112,8 @@ xmap <silent> ie <Plug>CamelCaseMotion_ie
 """ We can't use <C-BS> because of SSH so use <C-Back> and <C-Word> to delete
 inoremap <C-b> <C-\><C-o>dB
 inoremap <C-w> <C-\><C-o>dW
+""" Auto-select everything between braces when jumping to match
+noremap % v%
 
 """ Reading/Writing
 set noautowrite           " Never write a file unless I request it.
@@ -230,7 +232,6 @@ let g:tmuxline_preset = {
 let g:promptline_theme = 'airline'
 let g:promptline_preset = {
     \'b': [ promptline#slices#cwd({'dir_limit': 8}) ],
-    \'c': [ promptline#slices#vcs_branch()],
     \'warn': [ promptline#slices#last_exit_code() ]}
 
 
