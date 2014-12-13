@@ -4,6 +4,10 @@
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore.global
+	autocrlf = false
+	eol = lf
 [github]
 	user = osbolab
 	email = matt@osbolab.com
+[push]
+	default = simple

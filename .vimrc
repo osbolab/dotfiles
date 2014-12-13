@@ -1,12 +1,24 @@
-"
-set nocompatible              " Don't be compatible with vi
+set nocompatible
+set ttyfast
+
+function! EnsureDirExists(dir)
+  if !isdirectory(a:dir)
+    if exists("*mkdir")
+      call mkdir(a:dir,'p')
+      echo "Created directory: " . a:dir
+    else
+      echo "Please create directory: " . a:dir
+    endif
+  endif
+endfunction
 
 if has('win32') || has('win64')
+  """ Vim on windows doesn't normally use $HOME/.vim for some reason
   set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
 " ==========================================================
-" Pathogen - Allows us to organize our vim plugins
+" Pathogen plugin loader (in $VIM/bundle)
 " ==========================================================
 " Load pathogen with docs for all plugins
 call pathogen#infect()
@@ -43,11 +55,17 @@ endif
 
 syntax on                 " syntax highlighing
 filetype on               " try to detect filetypes
-filetype plugin indent on " enable loading indent file for filetype
-set number
-""" Enable relative numbers in normal mode and disable in insert
-au InsertEnter * silent! :set norelativenumber
-au InsertLeave,BufNewFile,VimEnter * silent! :set relativenumber
+filetype plugin indent on " enable loading indent file for filetype[3~[3~[3~[3~[3~
+""" Don't use relative numbers for big files (syntax highlighting gets slow)
+let g:big_file_size = 50 * 1024
+if getfsize(expand('%%:p')) > g:big_file_size
+  set number
+  set norelativenumber
+  set nocursorline
+else
+  set relativenumber
+  set cursorline
+endif
 set numberwidth=1         " using only 1 column (and 1 space) while possible
 set colorcolumn=80        " Highlight the column width limit for wrapping
 """ Autocomplete
@@ -59,16 +77,15 @@ set wildignore+=*.egg-info/**
 
 """ Insert completion
 """ Don't select first item, follow typing in autocomplete
-set completeopt=menuone,longest,preview
-set pumheight=6           " Keep a small completion window
-""" Select the item in the list with enter
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-""" close preview window automatically when we move around
-au CursorMovedI * if pumvisible() == 0|pclose|endif
-au InsertLeave * if pumvisible() == 0|pclose|endif
+"set completeopt=menuone,longest
+"set pumheight=6           " Keep a small completion window
+"""" Select the item in the list with enter
+"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"""" close preview window automatically when we move around
+"au CursorMovedI * if pumvisible() == 0|pclose|endif
+"au InsertLeave * if pumvisible() == 0|pclose|endif
 
 """ Moving Around/Editing
-set cursorline            " have a line indicate the cursor location
 set ruler                 " show the cursor position all the time
 set nostartofline         " Avoid moving cursor to BOL when jumping around
 set virtualedit=all       " Let cursor move past the last char in <C-v> mode
@@ -90,12 +107,6 @@ set shiftround            " Round indent to a multiple of shiftwidth
 set matchpairs+=<:>       " show matching <> (html mainly) as well
 set foldmethod=indent     " allow us to fold on indents
 set foldlevel=99          " don't fold by default
-""" Unbind arrow keys; use them for tmux or something
-for prefix in ['i', 'n', 'v']
-  for key in ['<Up>', '<Down>', '<Left>', '<Right>']
-    exe prefix . "noremap " . key . " <Nop>"
-  endfor
-endfor
 """ Use sane camelwords movement always
 map <silent> w <Plug>CamelCaseMotion_w
 map <silent> b <Plug>CamelCaseMotion_b
@@ -112,8 +123,25 @@ xmap <silent> ie <Plug>CamelCaseMotion_ie
 """ We can't use <C-BS> because of SSH so use <C-Back> and <C-Word> to delete
 inoremap <C-b> <C-\><C-o>dB
 inoremap <C-w> <C-\><C-o>dW
+inoremap <C-h> <C-\><C-o>db
+inoremap <C-l> <C-\><C-o>dw
 """ Auto-select everything between braces when jumping to match
 noremap % v%
+
+""" Use the same keys to switch between vim windows and tmux panes
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> h :TmuxNavigateLeft<cr>
+nnoremap <silent> j :TmuxNavigateDown<cr>
+nnoremap <silent> k :TmuxNavigateUp<cr>
+nnoremap <silent> l :TmuxNavigateRight<cr>
+nnoremap <silent> ; :TmuxNavigatePrevious<cr>
+
+set lazyredraw
+vnoremap <silent> <C-y> :!push<cr>gv
+nnoremap <silent> <C-y> :silent! execute "!push " . shellescape(getline('.'), 1)<cr>:redraw!<cr>
+noremap <silent> <C-p> :read !pop ~<cr>
+
 
 """ Reading/Writing
 set noautowrite           " Never write a file unless I request it.
@@ -122,16 +150,8 @@ set autoread              " Automatically re-read changed files.
 set modeline              " Allow vim options to be embedded in files;
 set modelines=5           " they must be within the first or last 5 lines.
 set ffs=unix,dos,mac      " Try recognizing dos, unix, and mac line endings.
-" If the current buffer has never been saved, it will have no name,
-" call the file browser to save it, otherwise just save it.
-command! -nargs=0 -bar UpdateF if &modified
-                           \|    if empty(bufname('%'))
-                           \|        browse confirm write
-                           \|    else
-                           \|        confirm write
-                           \|    endif
-                           \|endif
-nnoremap <silent> <C-S> :<C-u>UpdateF<CR>
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <C-o><C-s>
 """ Show training whitespace
 if !has('win32') && !has('win64')
   set list listchars=tab:»·,trail:·
@@ -146,16 +166,6 @@ augroup FiletypeOnSave
   au BufWritePost * if &ft == "" | filetype detect | endif
 augroup END
 
-function! EnsureDirExists (dir)
-  if !isdirectory(a:dir)
-    if exists("*mkdir")
-      call mkdir(a:dir,'p')
-      echo "Created directory: " . a:dir
-    else
-      echo "Please create directory: " . a:dir
-    endif
-  endif
-endfunction
 
 """ Backup
 set backup
@@ -244,8 +254,8 @@ let g:promptline_preset = {
 "  Quickfix - Shows compiler errors after :make
 " ----------------------------------------------------------
 " open/close the quickfix window
-nmap <leader>c :copen<CR>
-nmap <leader>cc :cclose<CR>
+" nmap <leader>c :copen<CR>
+" nmap <leader>cc :cclose<CR>
 
 " ----------------------------------------------------------
 "  CommandT - Fuzzy file searching
@@ -253,6 +263,8 @@ nmap <leader>cc :cclose<CR>
 map <silent> <F1> :CommandT<CR>
 """ Disable optimizations that delay rendering during input
 let g:CommandTInputDebounce = 0
+let g:CommandTTraverseSCM = "dir"
+let g:CommandTWildIgnore = "build/*,**/build/*,ext/*,**/ext/*"
 
 " ----------------------------------------------------------
 "  NERDTree - File browser
@@ -278,8 +290,8 @@ map <silent> <F2> :call Toggle_Toolwin_NerdTree()<CR>
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeQuitOnOpen = 1
 " Open NERDTree if no files were specified
-au StdinReadPre * let s:std_in=1
-au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"au StdinReadPre * let s:std_in=1
+"au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | let g:Toolwin_Nerd=winnr() | endif
 
 " ----------------------------------------------------------
 "  CTAGS - Symbol navigation
@@ -308,15 +320,20 @@ function! AutoTagbar()
   let l:width=winwidth(0)
   if (l:width >= 80+g:tagbar_width)
     :TagbarOpen
+    let g:Toolwin_Ctags = winnr()
   endif
 endfunction
-au FileType c,cpp :call AutoTagbar()
+"au FileType c,cpp :call AutoTagbar()
 
 
 " ----------------------------------------------------------
 "  Gundo - Undo tree visualization
 " ----------------------------------------------------------
 noremap <silent> <F4> :GundoToggle<CR>
+""" Persistent undo
+set undodir=$HOME/.vim/.undo
+silent! call EnsureDirExists(&undodir)
+set undofile
 
 " ----------------------------------------------------------
 "  Make - build environment
@@ -377,15 +394,6 @@ call tinymode#Map("winsize", ".", "2wincmd >")
 " ----------------------------------------------------------
 "  Window management - Splitting
 " ----------------------------------------------------------
-""" Bind the new window to this one's scroll position
-fu! SplitScroll()
-    :wincmd v
-    :wincmd w
-    execute "normal! \<C-d>"
-    :set scrollbind
-    :wincmd w
-    :set scrollbind
-endfu
 """ Split optimally given the window size
 function! SplitWindow()
   let l:height=winheight(0) * 2
@@ -396,10 +404,48 @@ function! SplitWindow()
      :vsplit
   endif
 endfunction
-nmap <leader>sb :call SplitScroll()<CR>
+" I inevitably forget to hold or release C for the second stroke
 nmap <silent> <C-W><C-M> :call SplitWindow()<CR>
+nmap <silent> <C-W>m :call SplitWindow()<CR>
 """ Toggle the scroll bind on this window
 nmap <silent> <C-W><C-B> :set scb!<CR>
+
+" ----------------------------------------------------------
+"  Buffer management (use buffers like people use tabs)
+" ----------------------------------------------------------
+" List open buffers
+nnoremap <leader>bl :ls<CR>
+" Open a new, empty, buffer
+nnoremap <silent> <leader>e :enew<CR>
+" Close this buffer and go to the previous one
+nnoremap <silent> <leader>q :silent! :bp <BAR> bd #<CR>:redraw!<CR>
+" Navigate between buffers - right hand (normal vim idiom)
+nnoremap <silent> <leader>h :silent! bprevious<CR>:redraw!<CR>
+nnoremap <silent> <leader>l :silent! bnext<CR>:redraw!<CR>
+" Left hand bindings (since <leader> is on the right)
+nmap <leader>a <leader>h
+nmap <leader>d <leader>l
+" There's got to be a better way to do this
+nnoremap <silent> <leader>1 :buf 1<CR>
+nnoremap <silent> <leader>2 :buf 2<CR>
+nnoremap <silent> <leader>3 :buf 3<CR>
+nnoremap <silent> <leader>4 :buf 4<CR>
+nnoremap <silent> <leader>5 :buf 5<CR>
+nnoremap <silent> <leader>6 :buf 6<CR>
+nnoremap <silent> <leader>7 :buf 7<CR>
+nnoremap <silent> <leader>8 :buf 8<CR>
+nnoremap <silent> <leader>9 :buf 9<CR>
+nnoremap <silent> <leader>0 :buf 0<CR>
+
+""" Use Tab for escape
+nnoremap <Tab> <Esc>
+vnoremap <Tab> <Esc>gV
+onoremap <Tab> <Esc>
+inoremap <Tab> <Esc>`^
+""" Use left+right hand chord for inserting/removing tabs in insert mode
+inoremap <C-]> <Tab>
+""" Something fucked up S-BS to make it delete words... kills me
+inoremap  
 
 
 " ==========================================================
@@ -409,41 +455,68 @@ nmap <silent> <C-W><C-B> :set scb!<CR>
 " ----------------------------------------------------------
 "  C++
 " ----------------------------------------------------------
-au BufRead */include/c++/* setf cpp
+""" Stop auto-continuing line comments
+au FileType c,cpp setlocal comments-=:// comments+=f://
+
+""" Find a project config file
+let g:include_path_config_file = ".includedirs"
+" Stop searching here
+let g:include_path_config_path_top = expand("$HOME/code")
+fu! SourceProjectConfig(dir)
+  if a:dir == g:include_path_config_path_top || a:dir == '/' | return | endif
+  if !exists('&g:syntastic_cpp_include_dirs') | let g:syntastic_cpp_include_dirs = [] | endif
+  for f in glob(fnameescape(a:dir).'/{,.}*', 1, 1)
+    if fnamemodify(f, ':t') ==# g:include_path_config_file
+      for line in readfile(f)
+        let line = fnamemodify(a:dir.'/'.fnameescape(line), ':p')
+        let g:syntastic_cpp_include_dirs = g:syntastic_cpp_include_dirs + [line]
+        let &path = &path . ',' . line
+      endfor
+      return
+    endif
+  endfor
+  call SourceProjectConfig(fnamemodify(a:dir, ':h'))
+endfunction
+
+au FileType cpp call SourceProjectConfig(getcwd())
+
+au BufRead */wscript setf python
+au BufWritePost */wscript setf python
+au FileType python setlocal shiftwidth=2 tabstop=2 expandtab
+
+au BufRead */c++/* setf cpp
 let g:syntastic_cpp_compiler = 'clang++'
 let g:syntastic_cpp_compiler_options = '-std=c++11'
+let g:syntastic_cpp_check_header = 1
+let g:syntastic_cpp_auto_refresh_includes = 1
+let g:syntastic_cpp_config_file = ".syntastic"
 
 """ Use clang compiler for autocomplete
-let g:clang_use_library=1
-""" Display compile errors
-let g:clang_complete_copen=1
-let g:clang_complete_macros=1
-let g:clang_complete_patterns=0
-
-let g:clang_memory_percent=70
-let g:clang_user_options=' -std=c++11 || exit 0'
-""" 0: Don't select the first completion item
-""" 1: Select the first completion item and insert it on <Enter>
-""" 2: Automatically insert what clang thinks is right
-let g:clang_auto_select=1
-
-""" Enable snippets and make them hideable by syntax highlighting
-set conceallevel=2
-set concealcursor=vin
-let g:clang_snippets=1
-let g:clang_conceal_snippets=1
-""" The only one that works with clang_complete (?)
-let g:clang_snippets_engine='clang_complete'
+"let g:clang_use_library=1
+"""" Display compile errors
+"let g:clang_complete_copen=1
+"let g:clang_complete_macros=1
+"let g:clang_complete_patterns=0
+"""" HATE
+"let g:clang_snippets = 0
+"
+"let g:clang_memory_percent=70
+"let g:clang_user_options=' -std=c++11 || exit 0'
+"""" 0: Don't select the first completion item
+"""" 1: Select the first completion item and insert it on <Enter>
+"""" 2: Automatically insert what clang thinks is right
+"let g:clang_auto_select=1
 
 """ Use clang for source formatting
 """ Pick up the format from each project
 let g:clang_format#detect_style_file = 1
 """ Format on save
-let g:clang_format#auto_format = 1
+let g:clang_format#auto_format = 0
+noremap <silent> <F12> :silent! :ClangFormat<CR>
 
 """ Update ctags in the background
-let g:easytags_async = 1
-""" Separate tags into lanuage-specific files (duh)
-let g:easytags_by_filetype="~/.tags"
-""" Apparently generates much larger files, but members are kind of important
-let g:easytags_include_members = 1
+"let g:easytags_async = 1
+"""" Separate tags into lanuage-specific files (duh)
+"let g:easytags_by_filetype="~/.tags"
+"""" Apparently generates much larger files, but members are kind of important
+"let g:easytags_include_members = 1

@@ -47,12 +47,6 @@
 [submodule ".vim/bundle/airline"]
 	path = .vim/bundle/airline
 	url = https://github.com/bling/vim-airline.git
-[submodule ".vim/bundle/tmuxline"]
-	path = .vim/bundle/tmuxline
-	url = https://github.com/edkolev/tmuxline.vim.git
-[submodule ".vim/bundle/promptline"]
-	path = .vim/bundle/promptline
-	url = https://github.com/edkolev/promptline.vim.git
 [submodule ".vim/bundle/gundo"]
 	path = .vim/bundle/gundo
 	url = https://github.com/sjl/gundo.vim.git
@@ -65,3 +59,15 @@
 [submodule ".vim/bundle/webapi"]
 	path = .vim/bundle/webapi
 	url = https://github.com/mattn/webapi-vim.git
+[submodule ".vim/bundle/clang-type-inspector"]
+	path = .vim/bundle/clang-type-inspector
+	url = https://github.com/rhysd/clang-type-inspector.vim.git
+[submodule ".vim/bundle/libclang"]
+	path = .vim/bundle/libclang
+	url = https://github.com/rhysd/libclang-vim.git
+[submodule ".vim/bundle/tmux-navigator"]
+	path = .vim/bundle/tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule ".vim/bundle/promptline"]
+	path = .vim/bundle/promptline
+	url = https://github.com/edkolev/promptline.vim.git

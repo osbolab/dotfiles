@@ -105,5 +105,15 @@ fi
 
 stty -ixon
 
-# Set the viewer for ranger
+# Set the ranger utils
 export PAGER=less
+export EDITOR=vim
+
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+
+export android_sdk=/usr/android-sdk
+export PATH=$PATH:$android_sdk/tools:$android_sdk/platform-tools
+
+export android_ndk=/usr/android-ndk
+export PATH=$PATH:$android_ndk
