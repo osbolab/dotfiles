@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # X settings
-xset -b
+xset b off
+xset r rate 200 30
 xrdb -merge .xresources
 
 # Multimonitor
@@ -9,9 +10,6 @@ xrdb -merge .xresources
 
 # Wallpaper
 [ -e .fehbg ] && source .fehbg
-
-# Hide mouse cursor when not used
-unclutter -root -visible &
 
 # Keyboard layout 
 xmodmap .xmodmap
