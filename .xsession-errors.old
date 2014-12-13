@@ -1,0 +1,21 @@
+openConnection: connect: No such file or directory
+cannot connect to brltty at :0
+/home/msbarnar/Downloads was removed, reassigning DOWNLOAD to homedir
+Script for none started at run_im.
+Script for auto started at run_im.
+Script for default started at run_im.
+Script for none started at run_im.
+Script for auto started at run_im.
+Script for default started at run_im.
+i3status: trying to auto-detect output_format setting
+i3status: auto-detection: parent process is "sh", looking at its parent
+i3status: auto-detected "i3bar"
+Failed to connect to session manager: Failed to connect to the session manager: SESSION_MANAGER environment variable not defined
+/home/msbarnar/.xinitrc: line 14: [: missing `]'
+xfsettingsd: No window manager registered on screen 0.
+
+(xfsettingsd:1674): xfsettingsd-WARNING **: Failed to get the _NET_NUMBER_OF_DESKTOPS property.
+Exiting due to signal.
+g_dbus_connection_real_closed: Remote peer vanished with error: Underlying GIOStream returned 0 bytes on an async read (g-io-error-quark, 0). Exiting.
+urxvt: X connection to ':0' broken, unable to recover, exiting.
+xfsettingsd: Fatal IO error 11 (Resource temporarily unavailable) on X server :0.

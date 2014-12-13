@@ -1,4 +1,5 @@
 code/
+download/
 
 .dmrc
 .xscreensaver
@@ -35,6 +36,7 @@ code/
 .bash_history
 .config/ranger/bookmarks
 
+.vim/.undo/
 .vimtags
 .tags/
 .config/ranger/history
