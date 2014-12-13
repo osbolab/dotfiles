@@ -131,11 +131,11 @@ noremap % v%
 """ Use the same keys to switch between vim windows and tmux panes
 let g:tmux_navigator_no_mappings = 1
 
-nnoremap <silent> h :TmuxNavigateLeft<cr>
-nnoremap <silent> j :TmuxNavigateDown<cr>
-nnoremap <silent> k :TmuxNavigateUp<cr>
-nnoremap <silent> l :TmuxNavigateRight<cr>
-nnoremap <silent> ; :TmuxNavigatePrevious<cr>
+" nnoremap <silent> h :TmuxNavigateLeft<cr>
+" nnoremap <silent> j :TmuxNavigateDown<cr>
+" nnoremap <silent> k :TmuxNavigateUp<cr>
+" nnoremap <silent> l :TmuxNavigateRight<cr>
+" nnoremap <silent> ; :TmuxNavigatePrevious<cr>
 
 set lazyredraw
 vnoremap <silent> <C-y> :!push<cr>gv
