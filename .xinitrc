@@ -14,4 +14,7 @@ xrdb -merge .xresources
 [ -e ~/.xmodmap ] && xmodmap ~/.xmodmap
 
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+/usr/bin/clipit -d &
 
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
