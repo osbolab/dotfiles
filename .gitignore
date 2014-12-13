@@ -4,6 +4,7 @@ code/
 .xscreensaver
 .xsession-errors
 .ICEauthority
+.Xauthority
 
 .config/Thunar/
 .config/autostart/

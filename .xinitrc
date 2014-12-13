@@ -1,15 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
 # X settings
 xset b off
-xset r rate 200 30
 xrdb -merge .xresources
 
 # Multimonitor
-[ -e .screens ] && source .screens
+[ -e ~/.screens ] && source ~/.screens
 
 # Wallpaper
-[ -e .fehbg ] && source .fehbg
+[ -e ~/.fehbg ] && source ~/.fehbg
 
 # Keyboard layout 
-xmodmap .xmodmap
+[ -e ~/.xmodmap ] && xmodmap ~/.xmodmap
+
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+
