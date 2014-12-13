@@ -1,3 +1,9 @@
 [user]
 	email = matt@osbolab.com
 	name = Matt Barnard
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore.global
+[github]
+	user = osbolab
+	email = matt@osbolab.com

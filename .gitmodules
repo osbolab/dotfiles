@@ -1,0 +1,67 @@
+[submodule ".shell/powerline"]
+  path = .shell/powerline
+  url = https://github.com/milkbikis/powerline-shell.git
+[submodule ".vim/bundle/base16-colorscheme"]
+	path = .vim/bundle/base16-colorscheme
+	url = https://github.com/chriskempson/base16-vim.git
+[submodule ".vim/bundle/command-t"]
+	path = .vim/bundle/command-t
+	url = https://github.com/wincent/command-t.git
+[submodule ".vim/bundle/tagbar"]
+	path = .vim/bundle/tagbar
+	url = git://github.com/majutsushi/tagbar
+[submodule ".vim/bundle/nerdtree"]
+	path = .vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule ".vim/bundle/indentLine"]
+	path = .vim/bundle/indentLine
+	url = https://github.com/Yggdroot/indentLine.git
+[submodule ".vim/bundle/vim-airline"]
+	path = .vim/bundle/vim-airline
+	url = https://github.com/bling/vim-airline.git
+[submodule ".vim/bundle/syntastic"]
+	path = .vim/bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git
+[submodule ".vim/bundle/csapprox"]
+	path = .vim/bundle/csapprox
+	url = https://github.com/godlygeek/csapprox.git
+[submodule ".vim/bundle/clang-complete"]
+	path = .vim/bundle/clang-complete
+	url = https://github.com/Rip-Rip/clang_complete.git
+[submodule ".vim/bundle/easytags"]
+	path = .vim/bundle/easytags
+	url = https://github.com/xolox/vim-easytags.git
+[submodule ".vim/bundle/misc"]
+	path = .vim/bundle/misc
+	url = https://github.com/xolox/vim-misc.git
+[submodule ".vim/bundle/mw-utils"]
+	path = .vim/bundle/mw-utils
+	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
+[submodule ".vim/bundle/tlib"]
+  path = .vim/bundle/tlib
+  url = https://github.com/tomtom/tlib_vim.git
+  
+[submodule ".vim/bundle/CamelCaseMotion"]
+	path = .vim/bundle/CamelCaseMotion
+	url = https://github.com/bkad/CamelCaseMotion.git
+[submodule ".vim/bundle/airline"]
+	path = .vim/bundle/airline
+	url = https://github.com/bling/vim-airline.git
+[submodule ".vim/bundle/tmuxline"]
+	path = .vim/bundle/tmuxline
+	url = https://github.com/edkolev/tmuxline.vim.git
+[submodule ".vim/bundle/promptline"]
+	path = .vim/bundle/promptline
+	url = https://github.com/edkolev/promptline.vim.git
+[submodule ".vim/bundle/gundo"]
+	path = .vim/bundle/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule ".vim/bundle/clang-format"]
+	path = .vim/bundle/clang-format
+	url = https://github.com/rhysd/vim-clang-format.git
+[submodule ".vim/bundle/surround"]
+	path = .vim/bundle/surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule ".vim/bundle/webapi"]
+	path = .vim/bundle/webapi
+	url = https://github.com/mattn/webapi-vim.git

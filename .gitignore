@@ -1,0 +1,18 @@
+code/
+
+# Sensitive
+.ssh/
+
+# Purely temporary
+.backup/
+.cache/
+.swap/
+.viminfo
+.lesshst
+.bash_history
+.config/ranger/bookmarks
+
+.vimtags
+.tags/
+.config/ranger/history
+.gem/
