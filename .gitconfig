@@ -1,15 +1,13 @@
 [user]
 	email = matt@osbolab.com
-	name = Matthew Barnard
-[code]
-	editor = vim
+	name = Matt Barnard
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore.global
 	autocrlf = false
 	eol = lf
 [github]
-	user = Osbolab
+	user = osbolab
 	email = matt@osbolab.com
 [push]
 	default = simple

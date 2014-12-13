@@ -1,5 +1,27 @@
 code/
 
+.dmrc
+.xscreensaver
+.xsession-errors
+.ICEauthority
+
+.config/Thunar/
+.config/autostart/
+.config/chromium/
+.config/dconf/
+.config/gtk-2.0/
+.config/pulse/
+.config/software-center/
+.config/user-dirs.dirs
+.config/user-dirs.locale
+.config/xfce4/
+.dbus/
+.gconf/
+.local/
+.macromedia/
+.pki/
+.thumbnails/
+
 # Sensitive
 .ssh/
 
